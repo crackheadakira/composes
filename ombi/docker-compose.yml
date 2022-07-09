@@ -9,11 +9,11 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /mnt/931GB/ombi:/config
+      - ${DRIVE}/ombi:/config
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.ombi.rule=Host(`need.mrx.taliops.com`)
+      - traefik.http.routers.ombi.rule=Host(`need.${DOMAIN}`)
     networks:
       - media-network
 

@@ -18,8 +18,8 @@ services:
       # cloudflare headers + LAN will be trusted
       - --entrypoints.websecure.forwardedHeaders.trustedIPs=${IPLIST}
       - --entryPoints.websecure.proxyProtocol.trustedIPs=172.16.0.0/12
-      - --entrypoints.websecure.http.tls.domains[0].main=${domain}
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.${domain}
+      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
+      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
       - --certificatesresolvers.le.acme.dnschallenge=true
       - --certificatesresolvers.le.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.le.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
@@ -43,7 +43,7 @@ services:
 
     labels:
       traefik.enable: "true"
-      traefik.http.routers.api.rule: Host(`tra.${domain}`)
+      traefik.http.routers.api.rule: Host(`tra.${DOMAIN}`)
       traefik.http.routers.api.service: api@internal
       traefik.http.services.api-svc.loadbalancer.server.port: 8080
 
@@ -57,4 +57,4 @@ services:
     container_name: "whoami"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`who.mrx.taliops.com`)
+      - traefik.http.routers.whoami.rule=Host(`who.${DOMAIN}`)

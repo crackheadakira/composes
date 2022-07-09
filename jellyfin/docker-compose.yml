@@ -9,14 +9,14 @@ services:
       PUID: ${PUID}
       PGID: ${PGID}
     volumes:
-      - /mnt/931GB/jellyfin/library:/config
-      - /mnt/931GB/jellyfin/tv:/data/tvshows
-      - /mnt/931GB/jellyfin/movies:/data/movies
-      - /mnt/931GB/jellyfin/books:/data/books
+      - ${DRIVE}/jellyfin/library:/config
+      - ${DRIVE}/jellyfin/tv:/data/tvshows
+      - ${DRIVE}/jellyfin/movies:/data/movies
+      - ${DRIVE}/jellyfin/books:/data/books
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.jellyfin.rule=Host(`jel.mrx.taliops.com`)
+      - traefik.http.routers.jellyfin.rule=Host(`jel.${DOMAIN}`)
     networks:
       - media-network
 

@@ -9,12 +9,12 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=${WEBUI_PORT}
     volumes:
-      - /mnt/931GB/qbit:/config
-      - /mnt/931GB/sonarr/downloads:/downloads
+      - ${DRIVE}/qbit:/config
+      - ${DRIVE}/sonarr/downloads:/downloads
     restart: unless-stopped
     labels:
       - traefik.enable=true
-      - traefik.http.routers.qbit.rule=Host(`qb.mrx.taliops.com`)
+      - traefik.http.routers.qbit.rule=Host(`qb.${DOMAIN}`)
       - traefik.http.services.qbit.loadbalancer.server.port=${WEBUI_PORT}
     networks:
       - media-network

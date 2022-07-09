@@ -14,5 +14,5 @@ services:
       - 9000:9000
     labels:
       - traefik.enable=true
-      - traefik.http.routers.portainer.rule=Host(`prt.mrx.taliops.com`)
+      - traefik.http.routers.portainer.rule=Host(`prt.${DOMAIN}`)
       - traefik.http.services.portainer.loadbalancer.server.port=9000
