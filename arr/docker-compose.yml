@@ -1,0 +1,58 @@
+version: "2.1"
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DRIVE}/sonarr/config:/config
+      - ${DRIVE}/jellyfin/tv:/data/tv
+      - ${DRIVE}/sonarr/downloads:/data/downloads
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.sonarr.rule=Host(`son.mrx.taliops.com`)
+    networks:
+      - media-network
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DRIVE}/sonarr/config_radarr:/config
+      - ${DRIVE}/jellyfin/movies:/data/movies
+      - ${DRIVE}/sonarr/downloads:/data/downloads
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.radarr.rule=Host(`rad.mrx.taliops.com`)
+    networks:
+      - media-network
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DRIVE}/prowlarr:/config
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.prowlarr.rule=Host(`prwl.mrx.taliops.com`)
+    networks:
+      - media-network
+
+networks:
+  media-network:
+    name: media
+    external: true

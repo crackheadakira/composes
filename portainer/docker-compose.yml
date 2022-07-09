@@ -1,0 +1,18 @@
+version: '3'
+services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer_data:/data
+    ports:
+      - 9443:9443
+      - 8000:8000
+      - 3000:3000
+      - 9000:9000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.portainer.rule=Host(`prt.mrx.taliops.com`)
+      - traefik.http.services.portainer.loadbalancer.server.port=9000

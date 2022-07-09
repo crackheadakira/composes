@@ -1,0 +1,25 @@
+version: "2.1"
+services:
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=${WEBUI_PORT}
+    volumes:
+      - /mnt/931GB/qbit:/config
+      - /mnt/931GB/sonarr/downloads:/downloads
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.qbit.rule=Host(`qb.mrx.taliops.com`)
+      - traefik.http.services.qbit.loadbalancer.server.port=${WEBUI_PORT}
+    networks:
+      - media-network
+
+networks:
+  media-network:
+    name: media
+    external: true

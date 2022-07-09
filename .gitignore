@@ -1,0 +1,6 @@
+portainer/portainer_data
+*/.env
+traefik/acme.json
+traefik/acme-backup.json
+traefik/dynamic.yaml
+traefik/access.log

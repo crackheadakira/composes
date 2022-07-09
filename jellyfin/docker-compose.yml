@@ -1,0 +1,26 @@
+version: "2.1"
+
+services:
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      TZ: ${TZ}
+      PUID: ${PUID}
+      PGID: ${PGID}
+    volumes:
+      - /mnt/931GB/jellyfin/library:/config
+      - /mnt/931GB/jellyfin/tv:/data/tvshows
+      - /mnt/931GB/jellyfin/movies:/data/movies
+      - /mnt/931GB/jellyfin/books:/data/books
+    restart: unless-stopped
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.jellyfin.rule=Host(`jel.mrx.taliops.com`)
+    networks:
+      - media-network
+
+networks:
+  media-network:
+    name: media
+    external: true
