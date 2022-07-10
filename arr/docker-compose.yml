@@ -15,6 +15,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.sonarr.rule=Host(`son.${DOMAIN}`)
+      - traefik.http.routers.sonarr.middlewares=authelia@docker
     networks:
       - media-network
 
@@ -33,6 +34,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.radarr.rule=Host(`rad.mrx.taliops.com`)
+      - traefik.http.routers.radarr.middlewares=authelia@docker
     networks:
       - media-network
 
@@ -49,6 +51,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.prowlarr.rule=Host(`prwl.mrx.taliops.com`)
+      - traefik.http.routers.prowlarr.middlewares=authelia@docker
     networks:
       - media-network
 

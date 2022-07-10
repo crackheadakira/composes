@@ -24,17 +24,18 @@ services:
       - --certificatesresolvers.le.acme.dnschallenge.provider=cloudflare
       - --certificatesresolvers.le.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
       - --certificatesresolvers.le.acme.email=${cf_email}
-      - --certificatesresolvers.le.acme.storage=/etc/traefik/acme.json
+      - --certificatesresolvers.le.acme.storage=/data/traefik/acme.json
       - --entrypoints.websecure.http.tls.certResolver=le
       # - --certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory # staging for test
-      - --providers.file.filename=/etc/traefik/dynamic.yaml
+      - --providers.file.filename=/data/traefik/dynamic.yaml
       - --providers.file.watch=true
       - --accesslog=true
-      - --accesslog.filepath=/etc/traefik/access.log
+      - --accesslog.filepath=/data/traefik/access.log
       - --api.insecure=true
       - --entrypoints.traefik.address=:58080
-      # - --log.filePath=/etc/traefik/traefik.log
+      # - --log.filePath=/data/traefik/traefik.log
       # - --log.level=DEBUG
+      - --log.level=INFO
 
     environment:
       TZ: ${TZ}
@@ -49,7 +50,7 @@ services:
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./:/etc/traefik
+      - ./:/data/traefik
     network_mode: host
 
   whoami:
@@ -58,3 +59,5 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.whoami.rule=Host(`who.${DOMAIN}`)
+      - traefik.http.routers.whoami.tls.certresolver=le
+      - traefik.http.routers.whoami.middlewares=authelia@docker

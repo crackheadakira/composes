@@ -16,6 +16,7 @@ services:
       - traefik.enable=true
       - traefik.http.routers.qbit.rule=Host(`qb.${DOMAIN}`)
       - traefik.http.services.qbit.loadbalancer.server.port=${WEBUI_PORT}
+      - traefik.http.routers.qbit.middlewares=authelia@docker
     networks:
       - media-network
 

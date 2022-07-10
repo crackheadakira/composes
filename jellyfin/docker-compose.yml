@@ -17,6 +17,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.http.routers.jellyfin.rule=Host(`jel.${DOMAIN}`)
+      - traefik.http.routers.jellyfin.middlewares=authelia@docker
     networks:
       - media-network
 
