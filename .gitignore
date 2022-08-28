@@ -1,8 +1,10 @@
 portainer/portainer_data
+vaultwarden/*/
 */.env
 traefik/acme.json
 traefik/acme-backup.json
 traefik/dynamic.yaml
 traefik/access.log
+traefik/traefik.log
 authelia/config
 .env

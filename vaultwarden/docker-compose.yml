@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    hostname: mariadb
+    restart: always
+    env_file:
+      - ./.env
+    volumes:
+      - ./mariadb_vol:/var/lib/mysql
+      - /etc/localtime:/etc/localtime:ro
+
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: always
+    env_file:
+      - ./.env
+    depends_on:
+      - mariadb
+    volumes:
+      - ./vw-data:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.vaultwarden.rule=Host(`vault.${SUBDOMAIN}`)

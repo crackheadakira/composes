@@ -10,4 +10,4 @@ These are the docker compose files I use with portainer to run a quick & dirty m
 - [qBit](qbit/)
 - [Sonarr - Radarr - Prowlarr](arr/)
 - [Traefik](traefik/)
-- [Authelia](authelia/)
+- [VaultWarden](vaultwarden/)

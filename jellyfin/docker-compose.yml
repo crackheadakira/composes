@@ -25,3 +25,4 @@ networks:
   media-network:
     name: media
     external: true
+
