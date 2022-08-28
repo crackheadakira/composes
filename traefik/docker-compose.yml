@@ -5,27 +5,28 @@ services:
     container_name: traefik
     restart: unless-stopped
     command:
-      - --serversTransport.insecureSkipVerify=true # support backend https services without passhthrough
+      #- --serversTransport.insecureSkipVerify=true # support backend https services without passhthrough
       - --api.dashboard=true
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
       # - --providers.docker.defaultrule=Host(`{{ index .Labels \cname\}}.$domain`)
       - --entrypoints.web.address=:80
-      - --entrypoints.web.http.redirections.entryPoint.to=websecure
-      - --entrypoints.web.http.redirections.entryPoint.scheme=https
+      # - --entrypoints.web.http.redirections.entryPoint.to=websecure
+      # - --entrypoints.web.http.redirections.entryPoint.scheme=https
       # - --entrypoints.tcp.address=:443 # support backend https services with passthrough
-      - --entrypoints.websecure.address=:443
+      # - --entrypoints.websecure.address=:443
       # cloudflare headers + LAN will be trusted
-      - --entrypoints.websecure.forwardedHeaders.trustedIPs=${IPLIST}
-      - --entryPoints.websecure.proxyProtocol.trustedIPs=172.16.0.0/12
-      - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
-      - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
-      - --certificatesresolvers.le.acme.dnschallenge=true
-      - --certificatesresolvers.le.acme.dnschallenge.provider=cloudflare
-      - --certificatesresolvers.le.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
-      - --certificatesresolvers.le.acme.email=${cf_email}
-      - --certificatesresolvers.le.acme.storage=/data/traefik/acme.json
-      - --entrypoints.websecure.http.tls.certResolver=le
+      # - --entrypoints.websecure.forwardedHeaders.trustedIPs=${IPLIST}
+      # - --entryPoints.websecure.proxyProtocol.trustedIPs=172.16.0.0/12
+      # - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
+      # - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
+      # - --certificatesresolvers.le.acme.tlschallenge=
+      # - --certificatesresolvers.le.acme.dnschallenge=true
+      # - --certificatesresolvers.le.acme.dnschallenge.provider=cloudflare
+      # - --certificatesresolvers.le.acme.dnschallenge.resolvers=1.1.1.1:53,1.0.0.1:53
+      # - --certificatesresolvers.le.acme.email=${cf_email}
+      # - --certificatesresolvers.le.acme.storage=/data/traefik/acme.json
+      # - --entrypoints.websecure.http.tls.certResolver=le
       # - --certificatesresolvers.le.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory # staging for test
       - --providers.file.filename=/data/traefik/dynamic.yaml
       - --providers.file.watch=true
@@ -39,14 +40,12 @@ services:
 
     environment:
       TZ: ${TZ}
-      CF_API_EMAIL: ${cf_email}
-      CF_API_KEY: ${cf_api}
 
     labels:
       traefik.enable: "true"
       traefik.http.routers.api.rule: Host(`tra.${DOMAIN}`)
       traefik.http.routers.api.service: api@internal
-      traefik.http.services.api-svc.loadbalancer.server.port: 8080
+      traefik.http.services.api-svc.loadbalancer.server.port: 58080
 
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -58,6 +57,4 @@ services:
     container_name: "whoami"
     labels:
       - traefik.enable=true
-      - traefik.http.routers.whoami.rule=Host(`who.${DOMAIN}`)
-      - traefik.http.routers.whoami.tls.certresolver=le
-      - traefik.http.routers.whoami.middlewares=authelia@docker
+      - traefik.http.routers.whoami.rule=Host(`who.${DOMAIN}`) #- traefik.http.routers.whoami.middlewares=authelia@docker
